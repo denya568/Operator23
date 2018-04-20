@@ -11,6 +11,7 @@ import android.util.DisplayMetrics;
 import android.view.Gravity;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TableLayout;
@@ -27,8 +28,9 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
         setContentView(R.layout.activity_main);
-        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         lay = (LinearLayout) findViewById(R.id.mainLay);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
@@ -43,6 +45,9 @@ public class MainActivity extends AppCompatActivity {
 
         LoadBattlesAsync loadBattlesAsync = new LoadBattlesAsync();
         loadBattlesAsync.execute();
+
+        Intent openStream = new Intent(MainActivity.this, StreamActivity.class);
+        startActivity(openStream);
 
     }
 
