@@ -4,6 +4,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.security.cert.X509Certificate;
@@ -53,6 +54,11 @@ public class InetWork {
     public void getStreamBattles() {
         getStreamBattlesJSON();
     }
+
+    public void startStreamBattle(String battleID) {
+        startStreamBattlePOST(battleID);
+    }
+
 
 
 
@@ -117,6 +123,55 @@ public class InetWork {
             in.close();
         } catch (Exception e) {
             this.size = -1;
+        }
+    }
+
+    private void startStreamBattlePOST(String battleID) {
+        try {
+            URL url = new URL(adress + "start_stream_battle");
+            HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
+            //cert
+            SSLContext sslContext = SSLContext.getInstance("TLS");
+            TrustManager[] trustManagers = new TrustManager[] {
+                    new X509TrustManager() {
+                        public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                            return null;
+                        }
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+                    }
+            };
+            HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                @Override
+                public boolean verify(String s, SSLSession sslSession) {
+                    return s.equals(sslSession.getPeerHost());
+                }
+            };
+            conn.setHostnameVerifier(hostnameVerifier);
+            sslContext.init(null, trustManagers, null);
+            conn.setSSLSocketFactory(sslContext.getSocketFactory());
+            //cert
+            conn.setRequestMethod("POST");
+            conn.setReadTimeout(10000);
+            conn.setConnectTimeout(5000);
+            conn.connect();
+
+            String params = "battle_id=" + battleID;
+            //params = new String(params.getBytes("UTF-8"), "windows-1251");
+            DataOutputStream out = new DataOutputStream(conn.getOutputStream());
+            out.writeBytes(params);
+
+            out.flush();
+            out.close();
+
+            InputStreamReader in = new InputStreamReader(conn.getInputStream());
+            this.size = conn.getResponseCode();
+
+            conn.disconnect();
+            in.close();
+
+        } catch (Exception e) {
+            this.size = 404;
         }
     }
 

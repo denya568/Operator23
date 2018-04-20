@@ -27,6 +27,8 @@ import java.net.SocketException;
 
 public class StreamActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
+    String battleID;
+    int rp;
 
     private Button btnPublish;
     private Button btnSwitchCamera;
@@ -44,6 +46,30 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_stream);
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_LANDSCAPE);
+
+        battleID = getIntent().getStringExtra("battle_id");
+        if (battleID != null) {
+            Toast.makeText(getApplicationContext(), "BattleID = " + battleID, Toast.LENGTH_SHORT).show();
+            Thread th = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    InetWork inetWork = new InetWork();
+                    inetWork.startStreamBattle(battleID);
+                    rp = inetWork.size;
+                }
+            });
+            th.start();
+            try {
+                th.join();
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+        if (rp == 200) {
+            Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+        } else {
+            Toast.makeText(getApplicationContext(), String.valueOf(rp), Toast.LENGTH_SHORT).show();
+        }
 
         sp = getSharedPreferences("Yasea", MODE_PRIVATE);
         rtmpUrl = sp.getString("rtmpUrl", rtmpUrl);

@@ -3,4 +3,20 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="colorWhite">#FFFFFF</color>
+    <color name="colorRed">#FF0000</color>
+    <color name="colorBlack">#000000</color>
+    <color name="colorGray">#AAAAAA</color>
+    <color name="colorSiteBlue">#3379b6</color>
+    <color name="colorSiteRed">#a84442</color>
+    <color name="colorSiteRedPrizrak">#99a84442</color>
+    <color name="colorSiteGreen">#5cb75c</color>
+    <color name="colorSiteYolo">#efac4e</color>
+    <color name="colorSiteWhiteBlue">#5bbfdd</color>
+
+    <color name="blackw">#464451</color>
+
+    <color name="prizrak">#f0f0f0</color>
+    <color name="prizrak1">#80f0f0f0</color>
 </resources>
