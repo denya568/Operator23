@@ -26,6 +26,7 @@ public class InetWork {
     private ArrayList<String> category = new ArrayList<>();
     private ArrayList<String> count_users = new ArrayList<>();
     private ArrayList<String> date_start = new ArrayList<>();
+    private ArrayList<String> status = new ArrayList<>();
 
     public ArrayList<String> getBattle_id() {
         return battle_id;
@@ -45,6 +46,10 @@ public class InetWork {
 
     public ArrayList<String> getDate_start() {
         return date_start;
+    }
+
+    public ArrayList<String> getStatus() {
+        return status;
     }
 
     public int getSize() {
@@ -114,6 +119,7 @@ public class InetWork {
                 this.category.add(columns.getString("category"));
                 this.count_users.add(columns.getString("count_users"));
                 this.date_start.add(columns.getString("date_start"));
+                this.status.add(columns.getString("status"));
 
             }
             this.size = dataJSON.length();

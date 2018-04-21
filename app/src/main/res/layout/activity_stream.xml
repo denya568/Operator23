@@ -51,6 +51,15 @@
         android:layout_toRightOf="@id/record"
         android:text="soft encoder" />
 
+    <TextView
+        android:id="@+id/tvConnecting"
+        android:textColor="@color/colorSiteGreen"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:gravity="center"
+        android:paddingBottom="50dp"/>
+
     <EditText
         android:id="@+id/url"
         android:layout_width="wrap_content"
@@ -59,10 +68,10 @@
         android:textSize="14dp" />
 
     <LinearLayout
-        android:paddingTop="50dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:paddingTop="50dp">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -106,7 +115,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:gravity="center"
-                android:text="VideoFps" />
+                android:text="0" />
 
             <TextView
                 android:id="@+id/videoBitrate"
@@ -114,7 +123,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:gravity="center"
-                android:text="VideoBitrate" />
+                android:text="0" />
 
             <TextView
                 android:id="@+id/audioBitrate"
@@ -122,7 +131,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="100"
                 android:gravity="center"
-                android:text="AudioBitrate" />
+                android:text="0" />
 
 
         </LinearLayout>

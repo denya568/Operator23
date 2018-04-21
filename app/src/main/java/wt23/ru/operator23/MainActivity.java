@@ -46,8 +46,8 @@ public class MainActivity extends AppCompatActivity {
         LoadBattlesAsync loadBattlesAsync = new LoadBattlesAsync();
         loadBattlesAsync.execute();
 
-        Intent openStream = new Intent(MainActivity.this, StreamActivity.class);
-        startActivity(openStream);
+        /*Intent openStream = new Intent(MainActivity.this, StreamActivity.class);
+        startActivity(openStream);*/
 
     }
 
@@ -58,6 +58,7 @@ public class MainActivity extends AppCompatActivity {
         ArrayList<String> category = new ArrayList<>();
         ArrayList<String> count_users = new ArrayList<>();
         ArrayList<String> date_start = new ArrayList<>();
+        ArrayList<String> status = new ArrayList<>();
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
                 category = inetWork.getCategory();
                 count_users = inetWork.getCount_users();
                 date_start = inetWork.getDate_start();
+                status = inetWork.getStatus();
             }
 
             return null;
@@ -97,10 +99,10 @@ public class MainActivity extends AppCompatActivity {
                     TableLayout.LayoutParams lp = new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
                     lp.setMargins(10, 10, 10, 10);
                     TableLayout tableLayout = new TableLayout(getApplicationContext());
-                    if (i % 2 == 0) {
-                        tableLayout.setBackgroundColor(getResources().getColor(R.color.colorSiteYolo));
-                    } else {
+                    if (status.get(i).equalsIgnoreCase("ACTIVE")) {
                         tableLayout.setBackgroundColor(getResources().getColor(R.color.colorSiteGreen));
+                    } else if (status.get(i).equalsIgnoreCase("EXECUTION")) {
+                        tableLayout.setBackgroundColor(getResources().getColor(R.color.colorSiteRedPrizrak));
                     }
                     tableLayout.setOrientation(LinearLayout.VERTICAL);
                     tableLayout.setLayoutParams(lp);
@@ -150,7 +152,7 @@ public class MainActivity extends AppCompatActivity {
                     start.setTextSize(23);
                     start.setGravity(Gravity.CENTER);
                     start.setWidth(width);
-                    start.setHeight(height/2);
+                    start.setHeight(height / 2);
                     start.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {

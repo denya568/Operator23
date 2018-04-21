@@ -50,34 +50,12 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_FULL_SENSOR);
 
         battleID = getIntent().getStringExtra("battle_id");
-        if (battleID != null) {
-            Toast.makeText(getApplicationContext(), "BattleID = " + battleID, Toast.LENGTH_SHORT).show();
-            Thread th = new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    InetWork inetWork = new InetWork();
-                    inetWork.startStreamBattle(battleID);
-                    rp = inetWork.size;
-                }
-            });
-            th.start();
-            try {
-                th.join();
-            } catch (InterruptedException e) {
-                e.printStackTrace();
-            }
-        }
-        if (rp == 200) {
-            Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
-        } else {
-            Toast.makeText(getApplicationContext(), String.valueOf(rp), Toast.LENGTH_SHORT).show();
-        }
 
         sp = getSharedPreferences("Yasea", MODE_PRIVATE);
         rtmpUrl = sp.getString("rtmpUrl", rtmpUrl);
 
         final EditText efu = (EditText) findViewById(R.id.url);
-        efu.setText(rtmpUrl);
+        efu.setText("rtmp://82.199.101.55:1935/wt23/" + battleID);
 
         btnPublish = (Button) findViewById(R.id.publish);
         btnSwitchCamera = (Button) findViewById(R.id.swCam);
@@ -90,13 +68,38 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
         mPublisher.setPreviewResolution(640, 360);
         mPublisher.setOutputResolution(360, 640);
+
         mPublisher.setVideoHDMode();
         mPublisher.startCamera();
 
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 if (btnPublish.getText().toString().contentEquals("publish")) {
+                    if (battleID != null) {
+                        Toast.makeText(getApplicationContext(), "BattleID = " + battleID, Toast.LENGTH_SHORT).show();
+                        Thread th = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                InetWork inetWork = new InetWork();
+                                inetWork.startStreamBattle(battleID);
+                                rp = inetWork.size;
+                            }
+                        });
+                        th.start();
+                        try {
+                            th.join();
+                        } catch (InterruptedException e) {
+                            e.printStackTrace();
+                        }
+                    }
+                    if (rp == 200) {
+                        Toast.makeText(getApplicationContext(), "OK", Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), String.valueOf(rp), Toast.LENGTH_SHORT).show();
+                    }
+
                     rtmpUrl = efu.getText().toString();
                     SharedPreferences.Editor editor = sp.edit();
                     editor.putString("rtmpUrl", rtmpUrl);
@@ -210,18 +213,19 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
     @Override
     public void onRtmpConnecting(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        writeConnecting(msg);
     }
 
     @Override
     public void onRtmpConnected(String msg) {
-        Toast.makeText(getApplicationContext(), msg, Toast.LENGTH_SHORT).show();
+        writeConnecting(msg);
     }
 
     @Override
     public void onRtmpVideoStreaming() {
 
     }
+
 
     @Override
     public void onRtmpAudioStreaming() {
@@ -230,12 +234,12 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
     @Override
     public void onRtmpStopped() {
-        Toast.makeText(getApplicationContext(), "Stopped", Toast.LENGTH_SHORT).show();
+        writeConnecting("RTMP Stopped");
     }
 
     @Override
     public void onRtmpDisconnected() {
-        Toast.makeText(getApplicationContext(), "Disconnected", Toast.LENGTH_SHORT).show();
+        writeConnecting("RTMP Disconnected");
     }
 
     private void writeVideoBitRate(String txt) {
@@ -251,6 +255,11 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
     private void writeVideoFPS(String txt) {
         TextView vidFPS = (TextView) findViewById(R.id.videoFps);
         vidFPS.setText(txt);
+    }
+
+    private void writeConnecting(String txt) {
+        TextView tv = (TextView) findViewById(R.id.tvConnecting);
+        tv.setText(txt);
     }
 
     @Override
@@ -300,12 +309,12 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
     @Override
     public void onNetworkWeak() {
-        Toast.makeText(getApplicationContext(), "Network weak", Toast.LENGTH_SHORT).show();
+        writeConnecting("Network WEAK");
     }
 
     @Override
     public void onNetworkResume() {
-        Toast.makeText(getApplicationContext(), "Network resume", Toast.LENGTH_SHORT).show();
+        writeConnecting("Network Resume");
     }
 
     @Override
