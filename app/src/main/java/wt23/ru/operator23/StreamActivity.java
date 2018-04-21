@@ -233,7 +233,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
-                mPublisher.switchCameraFilter(MagicFilterType.NONE);
+
             }
         });
 
