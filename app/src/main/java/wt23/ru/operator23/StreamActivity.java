@@ -1,22 +1,30 @@
 package wt23.ru.operator23;
 
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
 import android.os.Environment;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.github.faucamp.simplertmp.RtmpHandler;
+import com.seu.magicfilter.utils.MagicFilterType;
 
 import net.ossrs.yasea.SrsCameraView;
 import net.ossrs.yasea.SrsEncodeHandler;
@@ -25,6 +33,7 @@ import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.ArrayList;
 
 public class StreamActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
@@ -35,6 +44,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
     private Button btnSwitchCamera;
     private Button btnRecord;
     private Button btnSwitchEncoder;
+    private Spinner lFilter;
 
     private SharedPreferences sp;
     private String rtmpUrl = "rtmp://ossrs.net/";
@@ -61,6 +71,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         btnSwitchCamera = (Button) findViewById(R.id.swCam);
         btnRecord = (Button) findViewById(R.id.record);
         btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
+        lFilter = (Spinner) findViewById(R.id.lFilter);
 
         mPublisher = new SrsPublisher((SrsCameraView) findViewById(R.id.glsurfaceview_camera));
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
@@ -159,6 +170,70 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                     mPublisher.switchToHardEncoder();
                     btnSwitchEncoder.setText("soft encoder");
                 }
+            }
+        });
+
+        String[] list = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE", "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original"};
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
+        lFilter.setAdapter(adapter);
+        lFilter.setSelection(list.length-1);
+        lFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        mPublisher.switchCameraFilter(MagicFilterType.COOL);
+                        break;
+                    case 1:
+                        mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
+                        break;
+                    case 2:
+                        mPublisher.switchCameraFilter(MagicFilterType.EARLYBIRD);
+                        break;
+                    case 3:
+                        mPublisher.switchCameraFilter(MagicFilterType.EVERGREEN);
+                        break;
+                    case 4:
+                        mPublisher.switchCameraFilter(MagicFilterType.N1977);
+                        break;
+                    case 5:
+                        mPublisher.switchCameraFilter(MagicFilterType.NOSTALGIA);
+                        break;
+                    case 6:
+                        mPublisher.switchCameraFilter(MagicFilterType.ROMANCE);
+                        break;
+                    case 7:
+                        mPublisher.switchCameraFilter(MagicFilterType.SUNRISE);
+                        break;
+                    case 8:
+                        mPublisher.switchCameraFilter(MagicFilterType.SUNSET);
+                        break;
+                    case 9:
+                        mPublisher.switchCameraFilter(MagicFilterType.TENDER);
+                        break;
+                    case 10:
+                        mPublisher.switchCameraFilter(MagicFilterType.TOASTER2);
+                        break;
+                    case 11:
+                        mPublisher.switchCameraFilter(MagicFilterType.VALENCIA);
+                        break;
+                    case 12:
+                        mPublisher.switchCameraFilter(MagicFilterType.WALDEN);
+                        break;
+                    case 13:
+                        mPublisher.switchCameraFilter(MagicFilterType.WARM);
+                        break;
+                    case 14:
+                    default:
+                        mPublisher.switchCameraFilter(MagicFilterType.NONE);
+                        break;
+
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mPublisher.switchCameraFilter(MagicFilterType.NONE);
             }
         });
 
