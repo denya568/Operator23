@@ -23,7 +23,6 @@
         android:layout_alignParentBottom="true"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:background="@drawable/round_button"
         android:text="publish" />
 
     <Button
@@ -32,7 +31,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/publish"
         android:layout_toRightOf="@+id/publish"
-        android:background="@drawable/round_button"
         android:text="switch" />
 
     <Button
@@ -41,7 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/publish"
         android:layout_toRightOf="@id/swCam"
-        android:background="@drawable/round_button"
         android:text="record" />
 
     <Button
@@ -52,7 +49,6 @@
         android:layout_alignParentEnd="true"
         android:layout_alignParentRight="true"
         android:layout_toRightOf="@id/record"
-        android:background="@drawable/round_button"
         android:text="soft encoder" />
 
     <TextView
@@ -70,7 +66,6 @@
         android:layout_height="wrap_content"
         android:layout_alignParentRight="true"
         android:layout_centerInParent="true"
-        android:background="@drawable/round_button"
         android:text="filter" />
 
 

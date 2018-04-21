@@ -37,7 +37,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
     private Spinner lFilter;
 
     private SharedPreferences sp;
-    private String rtmpUrl = "rtmp://ossrs.net/";
+    private String rtmpUrl = "rtmp://82.199.101.55:1935/wt23/...";
     private String recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
 
     private SrsPublisher mPublisher;
@@ -68,8 +68,10 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
         mPublisher.setPreviewResolution(640, 360);
+        //mPublisher.setPreviewResolution(320, 240);
         mPublisher.setOutputResolution(360, 640);
-
+        //mPublisher.setOutputResolution(240, 320);
+        //mPublisher.setVideoSmoothMode();
         mPublisher.setVideoHDMode();
         mPublisher.startCamera();
 
