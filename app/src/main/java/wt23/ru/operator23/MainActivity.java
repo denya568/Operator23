@@ -55,6 +55,7 @@ public class MainActivity extends AppCompatActivity {
         int size;
         ArrayList<String> battle_id = new ArrayList<>();
         ArrayList<String> type = new ArrayList<>();
+        ArrayList<String> name = new ArrayList<>();
         ArrayList<String> category = new ArrayList<>();
         ArrayList<String> count_users = new ArrayList<>();
         ArrayList<String> date_start = new ArrayList<>();
@@ -70,6 +71,7 @@ public class MainActivity extends AppCompatActivity {
             } else {
                 battle_id = inetWork.getBattle_id();
                 type = inetWork.getType();
+                name = inetWork.getName();
                 category = inetWork.getCategory();
                 count_users = inetWork.getCount_users();
                 date_start = inetWork.getDate_start();
@@ -110,14 +112,23 @@ public class MainActivity extends AppCompatActivity {
                     TableRow tableRow = new TableRow(getApplicationContext());
                     tableRow.setLayoutParams(new TableLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT));
 
-                    TextView tvType = new TextView(getApplicationContext());
+                    /*TextView tvType = new TextView(getApplicationContext());
                     tvType.setTextColor(Color.WHITE);
                     tvType.setText(type.get(i));
                     tvType.setTextSize(23);
                     tvType.setWidth(width);
                     tvType.setHeight(height);
                     tvType.setGravity(Gravity.CENTER);
-                    tableRow.addView(tvType, 0);
+                    tableRow.addView(tvType, 0);*/
+
+                    TextView tvName = new TextView(getApplicationContext());
+                    tvName.setTextColor(Color.WHITE);
+                    tvName.setText(name.get(i));
+                    tvName.setTextSize(23);
+                    tvName.setWidth(width);
+                    tvName.setHeight(height);
+                    tvName.setGravity(Gravity.CENTER);
+                    tableRow.addView(tvName, 0);
 
                     TextView tvCategory = new TextView(getApplicationContext());
                     tvCategory.setTextColor(Color.WHITE);

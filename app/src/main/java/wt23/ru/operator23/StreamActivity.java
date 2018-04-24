@@ -16,12 +16,15 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.github.faucamp.simplertmp.RtmpHandler;
 import com.seu.magicfilter.utils.MagicFilterType;
+
 import net.ossrs.yasea.SrsCameraView;
 import net.ossrs.yasea.SrsEncodeHandler;
 import net.ossrs.yasea.SrsPublisher;
 import net.ossrs.yasea.SrsRecordHandler;
+
 import java.io.IOException;
 import java.net.SocketException;
 
@@ -34,7 +37,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
     private Button btnSwitchCamera;
     private Button btnRecord;
     private Button btnSwitchEncoder;
-    private Spinner lFilter;
+    private Spinner lFilter, quality;
 
     private SharedPreferences sp;
     private String rtmpUrl = "rtmp://82.199.101.55:1935/wt23/...";
@@ -62,15 +65,12 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         btnRecord = (Button) findViewById(R.id.record);
         btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
         lFilter = (Spinner) findViewById(R.id.lFilter);
+        quality = (Spinner) findViewById(R.id.quality);
 
         mPublisher = new SrsPublisher((SrsCameraView) findViewById(R.id.glsurfaceview_camera));
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
-        mPublisher.setPreviewResolution(640, 360);
-        //mPublisher.setPreviewResolution(320, 240);
-        mPublisher.setOutputResolution(360, 640);
-        //mPublisher.setOutputResolution(240, 320);
         //mPublisher.setVideoSmoothMode();
         mPublisher.setVideoHDMode();
         mPublisher.startCamera();
@@ -116,14 +116,17 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                     } else {
                         Toast.makeText(getApplicationContext(), "Use soft encoder", Toast.LENGTH_SHORT).show();
                     }
+
                     btnPublish.setText("stop");
                     btnSwitchEncoder.setEnabled(false);
+                    quality.setEnabled(false);
                 } else if (btnPublish.getText().toString().contentEquals("stop")) {
                     mPublisher.stopPublish();
                     mPublisher.stopRecord();
                     btnPublish.setText("publish");
                     btnRecord.setText("record");
                     btnSwitchEncoder.setEnabled(true);
+                    quality.setEnabled(true);
                 }
             }
         });
@@ -165,10 +168,34 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             }
         });
 
-        String[] list = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE", "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original"};
-        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, list);
-        lFilter.setAdapter(adapter);
-        lFilter.setSelection(list.length-1);
+        String[] qualityList = {"640x360", "1280x720"};
+        ArrayAdapter<String> adapterQualityList = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, qualityList);
+        quality.setAdapter(adapterQualityList);
+        quality.setSelection(0);
+        quality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        mPublisher.setPreviewResolution(640, 360);
+                        mPublisher.setOutputResolution(360, 640);
+                    case 1:
+                        mPublisher.setPreviewResolution(1280, 720);
+                        mPublisher.setOutputResolution(720, 1280);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mPublisher.setPreviewResolution(640, 360);
+                mPublisher.setOutputResolution(360, 640);
+            }
+        });
+
+        String[] filterList = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE", "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original"};
+        ArrayAdapter<String> adapterFilterList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filterList);
+        lFilter.setAdapter(adapterFilterList);
+        lFilter.setSelection(filterList.length - 1);
         lFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {

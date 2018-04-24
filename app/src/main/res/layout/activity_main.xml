@@ -30,7 +30,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="100"
                     android:gravity="center"
-                    android:text="Type"
+                    android:text="Battle Name"
                     android:textColor="@color/colorWhite"
                     android:textSize="20sp" />
 

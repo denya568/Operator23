@@ -23,6 +23,7 @@ public class InetWork {
     int size = 0;
     private ArrayList<String> battle_id = new ArrayList<>();
     private ArrayList<String> type = new ArrayList<>();
+    private ArrayList<String> name = new ArrayList<>();
     private ArrayList<String> category = new ArrayList<>();
     private ArrayList<String> count_users = new ArrayList<>();
     private ArrayList<String> date_start = new ArrayList<>();
@@ -34,6 +35,10 @@ public class InetWork {
 
     public ArrayList<String> getType() {
         return type;
+    }
+
+    public ArrayList<String> getName() {
+        return name;
     }
 
     public ArrayList<String> getCategory() {
@@ -65,24 +70,23 @@ public class InetWork {
     }
 
 
-
-
-
-
-
-    private void getStreamBattlesJSON(){
+    private void getStreamBattlesJSON() {
         try {
             URL url = new URL(adress + "get_stream_battles");
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             //cert
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            TrustManager[] trustManagers = new TrustManager[] {
+            TrustManager[] trustManagers = new TrustManager[]{
                     new X509TrustManager() {
                         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                             return null;
                         }
-                        public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
-                        public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        }
+
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        }
                     }
             };
             HostnameVerifier hostnameVerifier = new HostnameVerifier() {
@@ -116,6 +120,7 @@ public class InetWork {
 
                 this.battle_id.add(columns.getString("battle_id"));
                 this.type.add(columns.getString("type"));
+                this.name.add(columns.getString("name_battle"));
                 this.category.add(columns.getString("category"));
                 this.count_users.add(columns.getString("count_users"));
                 this.date_start.add(columns.getString("date_start"));
@@ -138,13 +143,17 @@ public class InetWork {
             HttpsURLConnection conn = (HttpsURLConnection) url.openConnection();
             //cert
             SSLContext sslContext = SSLContext.getInstance("TLS");
-            TrustManager[] trustManagers = new TrustManager[] {
+            TrustManager[] trustManagers = new TrustManager[]{
                     new X509TrustManager() {
                         public java.security.cert.X509Certificate[] getAcceptedIssuers() {
                             return null;
                         }
-                        public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
-                        public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+
+                        public void checkClientTrusted(X509Certificate[] certs, String authType) {
+                        }
+
+                        public void checkServerTrusted(X509Certificate[] certs, String authType) {
+                        }
                     }
             };
             HostnameVerifier hostnameVerifier = new HostnameVerifier() {
