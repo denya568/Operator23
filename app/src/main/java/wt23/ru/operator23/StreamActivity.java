@@ -66,16 +66,17 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         btnSwitchEncoder = (Button) findViewById(R.id.swEnc);
         lFilter = (Spinner) findViewById(R.id.lFilter);
         quality = (Spinner) findViewById(R.id.quality);
+        quality.setVisibility(View.GONE);
 
         mPublisher = new SrsPublisher((SrsCameraView) findViewById(R.id.glsurfaceview_camera));
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
 
-        /*mPublisher.setPreviewResolution(640, 360);
+        mPublisher.setPreviewResolution(640, 360);
         mPublisher.setOutputResolution(360, 640);
         mPublisher.setVideoHDMode();
-        mPublisher.startCamera();*/
+        mPublisher.startCamera();
 
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -121,14 +122,14 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
                     btnPublish.setText("stop");
                     btnSwitchEncoder.setEnabled(false);
-                    quality.setEnabled(false);
+                    //quality.setEnabled(false);
                 } else if (btnPublish.getText().toString().contentEquals("stop")) {
                     mPublisher.stopPublish();
                     mPublisher.stopRecord();
                     btnPublish.setText("publish");
                     btnRecord.setText("record");
                     btnSwitchEncoder.setEnabled(true);
-                    quality.setEnabled(true);
+                    //quality.setEnabled(true);
                     mPublisher.startCamera();
                 }
             }
@@ -171,7 +172,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             }
         });
 
-        String[] qualityList = {"640x360", "1280x720"};
+        /*String[] qualityList = {"640x360", "1280x720"};
         ArrayAdapter<String> adapterQualityList = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, qualityList);
         quality.setAdapter(adapterQualityList);
         quality.setSelection(0);
@@ -202,7 +203,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                 mPublisher.setOutputResolution(360, 640);
                 mPublisher.startCamera();
             }
-        });
+        });*/
 
         String[] filterList = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE", "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original"};
         ArrayAdapter<String> adapterFilterList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filterList);
