@@ -71,9 +71,11 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         mPublisher.setEncodeHandler(new SrsEncodeHandler(this));
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
-        //mPublisher.setVideoSmoothMode();
+
+        /*mPublisher.setPreviewResolution(640, 360);
+        mPublisher.setOutputResolution(360, 640);
         mPublisher.setVideoHDMode();
-        mPublisher.startCamera();
+        mPublisher.startCamera();*/
 
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -127,6 +129,7 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                     btnRecord.setText("record");
                     btnSwitchEncoder.setEnabled(true);
                     quality.setEnabled(true);
+                    mPublisher.startCamera();
                 }
             }
         });
@@ -177,18 +180,27 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
+                        mPublisher.stopCamera();
+                        mPublisher.setVideoHDMode();
                         mPublisher.setPreviewResolution(640, 360);
                         mPublisher.setOutputResolution(360, 640);
+                        mPublisher.startCamera();
                     case 1:
+                        mPublisher.stopCamera();
+                        mPublisher.setVideoHDMode();
                         mPublisher.setPreviewResolution(1280, 720);
                         mPublisher.setOutputResolution(720, 1280);
+                        mPublisher.startCamera();
                 }
             }
 
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
+                mPublisher.stopCamera();
+                mPublisher.setVideoHDMode();
                 mPublisher.setPreviewResolution(640, 360);
                 mPublisher.setOutputResolution(360, 640);
+                mPublisher.startCamera();
             }
         });
 
