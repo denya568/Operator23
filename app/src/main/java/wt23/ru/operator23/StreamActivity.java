@@ -3,6 +3,7 @@ package wt23.ru.operator23;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
 import android.os.Environment;
 import android.support.v7.app.AppCompatActivity;
@@ -73,10 +74,12 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
         mPublisher.setRtmpHandler(new RtmpHandler(this));
         mPublisher.setRecordHandler(new SrsRecordHandler(this));
 
-        mPublisher.setPreviewResolution(640, 360);
-        mPublisher.setOutputResolution(360, 640);
+        mPublisher.setPreviewResolution(1280, 720);
+        mPublisher.setOutputResolution(1280, 720);
         mPublisher.setVideoHDMode();
+        mPublisher.setScreenOrientation(0);
         mPublisher.startCamera();
+
 
         btnPublish.setOnClickListener(new View.OnClickListener() {
             @Override
