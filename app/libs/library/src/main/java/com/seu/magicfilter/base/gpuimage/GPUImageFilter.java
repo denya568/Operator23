@@ -17,9 +17,12 @@
 package com.seu.magicfilter.base.gpuimage;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.PointF;
 import android.opengl.GLES11Ext;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 import com.seu.magicfilter.utils.MagicFilterType;
 import com.seu.magicfilter.utils.OpenGLUtils;
