@@ -28,6 +28,8 @@ import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
 import java.net.SocketException;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class StreamActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
@@ -208,7 +210,18 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             }
         });*/
 
-        String[] filterList = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE", "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original"};
+        //mPublisher.switchCameraFilter(MagicFilterType.DENYA);
+        /*final Timer timer = new Timer();
+        final TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                mPublisher.switchCameraFilter(MagicFilterType.DENYA);
+            }
+        };
+        timer.schedule(timerTask, 5000);*/
+
+        String[] filterList = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE",
+                "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original", "Denya"};
         ArrayAdapter<String> adapterFilterList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filterList);
         lFilter.setAdapter(adapterFilterList);
         lFilter.setSelection(filterList.length - 1);
@@ -259,13 +272,16 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                         mPublisher.switchCameraFilter(MagicFilterType.WARM);
                         break;
                     case 14:
-                    default:
                         mPublisher.switchCameraFilter(MagicFilterType.NONE);
                         break;
-
+                    case 15:
+                        mPublisher.switchCameraFilter(MagicFilterType.DENYA);
+                        break;
+                    default:
+                        mPublisher.switchCameraFilter(MagicFilterType.DENYA);
+                        break;
                 }
             }
-
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 

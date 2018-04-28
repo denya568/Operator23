@@ -48,6 +48,7 @@ public enum  MagicFilterType {
     VALENCIA,
     WALDEN,
     XPROII,
+    DENYA,
     //image adjust
     CONTRAST,
     BRIGHTNESS,

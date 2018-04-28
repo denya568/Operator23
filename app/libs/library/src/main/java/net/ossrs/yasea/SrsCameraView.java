@@ -17,12 +17,38 @@ import com.seu.magicfilter.utils.OpenGLUtils;
 
 import java.io.IOException;
 import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
+import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
 import java.util.List;
 import java.util.concurrent.ConcurrentLinkedQueue;
 
 import javax.microedition.khronos.egl.EGLConfig;
 import javax.microedition.khronos.opengles.GL10;
+
+import static android.opengl.GLES20.GL_COLOR_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_BUFFER_BIT;
+import static android.opengl.GLES20.GL_DEPTH_TEST;
+import static android.opengl.GLES20.GL_FLOAT;
+import static android.opengl.GLES20.GL_FRAGMENT_SHADER;
+import static android.opengl.GLES20.GL_TEXTURE0;
+import static android.opengl.GLES20.GL_TEXTURE_2D;
+import static android.opengl.GLES20.GL_TRIANGLE_STRIP;
+import static android.opengl.GLES20.GL_VERTEX_SHADER;
+import static android.opengl.GLES20.glActiveTexture;
+import static android.opengl.GLES20.glBindTexture;
+import static android.opengl.GLES20.glClear;
+import static android.opengl.GLES20.glClearColor;
+import static android.opengl.GLES20.glDrawArrays;
+import static android.opengl.GLES20.glEnable;
+import static android.opengl.GLES20.glEnableVertexAttribArray;
+import static android.opengl.GLES20.glGetAttribLocation;
+import static android.opengl.GLES20.glGetUniformLocation;
+import static android.opengl.GLES20.glUniform1i;
+import static android.opengl.GLES20.glUniformMatrix4fv;
+import static android.opengl.GLES20.glUseProgram;
+import static android.opengl.GLES20.glVertexAttribPointer;
+import static android.opengl.GLES20.glViewport;
 
 /**
  * Created by Leo Ma on 2016/2/25.
@@ -78,12 +104,14 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
 
         mOESTextureId = OpenGLUtils.getExternalOESTextureID();
         surfaceTexture = new SurfaceTexture(mOESTextureId);
+
         surfaceTexture.setOnFrameAvailableListener(new SurfaceTexture.OnFrameAvailableListener() {
             @Override
             public void onFrameAvailable(SurfaceTexture surfaceTexture) {
                 requestRender();
             }
         });
+
 
         // For camera preview on activity creation
         if (mCamera != null) {
@@ -95,9 +123,11 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
         }
     }
 
+
+
     @Override
     public void onSurfaceChanged(GL10 gl, int width, int height) {
-        GLES20.glViewport(0, 0, width, height);
+        glViewport(0, 0, width, height);
         mSurfaceWidth = width;
         mSurfaceHeight = height;
         magicFilter.onDisplaySizeChanged(width, height);
@@ -150,9 +180,9 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
 
         mGLPreviewBuffer = ByteBuffer.allocateDirect(mPreviewWidth * mPreviewHeight * 4);
         mInputAspectRatio = mPreviewWidth > mPreviewHeight ?
-            (float) mPreviewWidth / mPreviewHeight : (float) mPreviewHeight / mPreviewWidth;
+                (float) mPreviewWidth / mPreviewHeight : (float) mPreviewHeight / mPreviewWidth;
 
-        return new int[] { mPreviewWidth, mPreviewHeight };
+        return new int[]{mPreviewWidth, mPreviewHeight};
     }
 
     public boolean setFilter(final MagicFilterType type) {
@@ -183,7 +213,7 @@ public class SrsCameraView extends GLSurfaceView implements GLSurfaceView.Render
             queueEvent(new Runnable() {
                 @Override
                 public void run() {
-                    GLES20.glDeleteTextures(1, new int[]{ mOESTextureId }, 0);
+                    GLES20.glDeleteTextures(1, new int[]{mOESTextureId}, 0);
                     mOESTextureId = OpenGLUtils.NO_TEXTURE;
                 }
             });

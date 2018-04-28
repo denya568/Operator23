@@ -141,6 +141,8 @@ public class MagicFilterFactory {
                 return new MagicCrayonFilter();
             case SKETCH:
                 return new MagicSketchFilter();
+            case DENYA:
+                return new DenyaFilter();
             //image adjust
             case BRIGHTNESS:
                 return new GPUImageBrightnessFilter();

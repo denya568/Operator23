@@ -4,9 +4,17 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.URL;
 import java.nio.Buffer;
+import java.security.cert.X509Certificate;
 
 import javax.microedition.khronos.opengles.GL10;
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 import android.content.Context;
 import android.content.res.AssetManager;
@@ -135,6 +143,89 @@ public class OpenGLUtils {
         }
 
         return textureHandle[0];
+    }
+
+    public static int loadTexture1(final Context context, final String addr){
+        final int[] textureHandle = new int[1];
+
+        GLES20.glGenTextures(1, textureHandle, 0);
+
+        if (textureHandle[0] != 0){
+
+            // Read in the resource
+            final Bitmap bitmap = loadImage(addr);
+
+            // Bind to the texture in OpenGL
+            GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, textureHandle[0]);
+
+            // Set filtering
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MAG_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_MIN_FILTER, GLES20.GL_LINEAR);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_S, GLES20.GL_CLAMP_TO_EDGE);
+            GLES20.glTexParameteri(GLES20.GL_TEXTURE_2D, GLES20.GL_TEXTURE_WRAP_T, GLES20.GL_CLAMP_TO_EDGE);
+            // Load the bitmap into the bound texture.
+            GLUtils.texImage2D(GLES20.GL_TEXTURE_2D, 0, bitmap, 0);
+
+            // Recycle the bitmap, since its data has been loaded into OpenGL.
+            bitmap.recycle();
+        }
+
+        if (textureHandle[0] == 0){
+            throw new RuntimeException("Error loading texture.");
+        }
+
+        return textureHandle[0];
+    }
+
+    private static Bitmap loadImage(final String urlAddress) {
+        final Bitmap[] bitmap = new Bitmap[1];
+        Thread th = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL(urlAddress);
+                    HttpsURLConnection connection = (HttpsURLConnection) url.openConnection();
+                    //cert
+                    SSLContext sslContext = SSLContext.getInstance("TLS");
+                    TrustManager[] trustManagers = new TrustManager[] {
+                            new X509TrustManager() {
+                                public java.security.cert.X509Certificate[] getAcceptedIssuers() {
+                                    return null;
+                                }
+                                public void checkClientTrusted(X509Certificate[] certs, String authType) {  }
+                                public void checkServerTrusted(X509Certificate[] certs, String authType) {  }
+                            }
+                    };
+                    HostnameVerifier hostnameVerifier = new HostnameVerifier() {
+                        @Override
+                        public boolean verify(String s, SSLSession sslSession) {
+                            return s.equals(sslSession.getPeerHost());
+                        }
+                    };
+                    connection.setHostnameVerifier(hostnameVerifier);
+                    sslContext.init(null, trustManagers, null);
+                    connection.setSSLSocketFactory(sslContext.getSocketFactory());
+                    //cert
+                    connection.connect();
+                    InputStream in = connection.getInputStream();
+                    bitmap[0] = BitmapFactory.decodeStream(in);
+
+                    in.close();
+                    connection.disconnect();
+
+                } catch (Exception e) {
+                    bitmap[0] = null;
+                }
+            }
+        });
+        th.start();
+        try {
+            th.join();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return bitmap[0];
     }
 
     private static Bitmap getImageFromAssetsFile(Context context,String fileName){
