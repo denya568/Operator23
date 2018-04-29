@@ -3,6 +3,8 @@ package wt23.ru.operator23;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.drawable.GradientDrawable;
 import android.hardware.Camera;
 import android.os.Environment;
@@ -14,6 +16,7 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,9 +30,21 @@ import net.ossrs.yasea.SrsPublisher;
 import net.ossrs.yasea.SrsRecordHandler;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.SocketException;
+import java.net.URL;
+import java.security.cert.X509Certificate;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
+
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLSession;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 
 public class StreamActivity extends AppCompatActivity implements RtmpHandler.RtmpListener,
         SrsRecordHandler.SrsRecordListener, SrsEncodeHandler.SrsEncodeListener {
@@ -44,9 +59,11 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
     private SharedPreferences sp;
     private String rtmpUrl = "rtmp://82.199.101.55:1935/wt23/...";
-    private String recPath = Environment.getExternalStorageDirectory().getPath() + "/test.mp4";
+    SimpleDateFormat sdf = new SimpleDateFormat("dd_MM_yy(HH_mm_ss)");
+    private String recPath = Environment.getExternalStorageDirectory().getPath() + "/" + sdf.format(new Date()) + ".mp4";
 
     private SrsPublisher mPublisher;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -177,51 +194,19 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             }
         });
 
-        /*String[] qualityList = {"640x360", "1280x720"};
-        ArrayAdapter<String> adapterQualityList = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, qualityList);
-        quality.setAdapter(adapterQualityList);
-        quality.setSelection(0);
-        quality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                switch (position) {
-                    case 0:
-                        mPublisher.stopCamera();
-                        mPublisher.setVideoHDMode();
-                        mPublisher.setPreviewResolution(640, 360);
-                        mPublisher.setOutputResolution(360, 640);
-                        mPublisher.startCamera();
-                    case 1:
-                        mPublisher.stopCamera();
-                        mPublisher.setVideoHDMode();
-                        mPublisher.setPreviewResolution(1280, 720);
-                        mPublisher.setOutputResolution(720, 1280);
-                        mPublisher.startCamera();
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-                mPublisher.stopCamera();
-                mPublisher.setVideoHDMode();
-                mPublisher.setPreviewResolution(640, 360);
-                mPublisher.setOutputResolution(360, 640);
-                mPublisher.startCamera();
-            }
-        });*/
-
-        //mPublisher.switchCameraFilter(MagicFilterType.DENYA);
-        /*final Timer timer = new Timer();
+        final Timer timer = new Timer();
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 mPublisher.switchCameraFilter(MagicFilterType.DENYA);
             }
         };
-        timer.schedule(timerTask, 5000);*/
+        timer.schedule(timerTask, 5000);
+    }
 
-        String[] filterList = {"COOL", "BEAUTY", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE",
-                "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "Original", "Denya"};
+    private void filterSettings() {
+        String[] filterList = {"Denya", "Original", "EARLYBIRD", "EVERGREEN", "N1977", "NOSTALGIA", "ROMANCE",
+                "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "COOL", "BEAUTY"};
         ArrayAdapter<String> adapterFilterList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filterList);
         lFilter.setAdapter(adapterFilterList);
         lFilter.setSelection(filterList.length - 1);
@@ -230,10 +215,10 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        mPublisher.switchCameraFilter(MagicFilterType.COOL);
+                        mPublisher.switchCameraFilter(MagicFilterType.DENYA);
                         break;
                     case 1:
-                        mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
+                        mPublisher.switchCameraFilter(MagicFilterType.NONE);
                         break;
                     case 2:
                         mPublisher.switchCameraFilter(MagicFilterType.EARLYBIRD);
@@ -272,22 +257,57 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                         mPublisher.switchCameraFilter(MagicFilterType.WARM);
                         break;
                     case 14:
-                        mPublisher.switchCameraFilter(MagicFilterType.NONE);
+                        mPublisher.switchCameraFilter(MagicFilterType.COOL);
                         break;
                     case 15:
-                        mPublisher.switchCameraFilter(MagicFilterType.DENYA);
+                        mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
                         break;
                     default:
                         mPublisher.switchCameraFilter(MagicFilterType.DENYA);
                         break;
                 }
             }
+
             @Override
             public void onNothingSelected(AdapterView<?> parent) {
 
             }
         });
+    }
 
+    private void qualitySettings() {
+        String[] qualityList = {"640x360", "1280x720"};
+        ArrayAdapter<String> adapterQualityList = new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, qualityList);
+        quality.setAdapter(adapterQualityList);
+        quality.setSelection(0);
+        quality.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                switch (position) {
+                    case 0:
+                        mPublisher.stopCamera();
+                        mPublisher.setVideoHDMode();
+                        mPublisher.setPreviewResolution(640, 360);
+                        mPublisher.setOutputResolution(360, 640);
+                        mPublisher.startCamera();
+                    case 1:
+                        mPublisher.stopCamera();
+                        mPublisher.setVideoHDMode();
+                        mPublisher.setPreviewResolution(1280, 720);
+                        mPublisher.setOutputResolution(720, 1280);
+                        mPublisher.startCamera();
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                mPublisher.stopCamera();
+                mPublisher.setVideoHDMode();
+                mPublisher.setPreviewResolution(640, 360);
+                mPublisher.setOutputResolution(360, 640);
+                mPublisher.startCamera();
+            }
+        });
     }
 
     @Override
