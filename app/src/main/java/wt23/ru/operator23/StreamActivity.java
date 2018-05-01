@@ -106,7 +106,6 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
 
                 if (btnPublish.getText().toString().contentEquals("publish")) {
                     if (battleID != null) {
-                        Toast.makeText(getApplicationContext(), "BattleID = " + battleID, Toast.LENGTH_SHORT).show();
                         Thread th = new Thread(new Runnable() {
                             @Override
                             public void run() {
@@ -194,14 +193,21 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
             }
         });
 
-        final Timer timer = new Timer();
+        filterSettings();
+    }
+
+    Timer timer = new Timer();
+    boolean isTimer = false;
+    private void runTimer() {
+        timer = new Timer();
         final TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 mPublisher.switchCameraFilter(MagicFilterType.DENYA);
             }
         };
-        timer.schedule(timerTask, 5000);
+        timer.schedule(timerTask, 1000, 5000);
+        isTimer = true;
     }
 
     private void filterSettings() {
@@ -209,58 +215,104 @@ public class StreamActivity extends AppCompatActivity implements RtmpHandler.Rtm
                 "SUNRISE", "SUNSET", "TENDER", "TOASTER2", "VALENCIA", "WALDEN", "WARM", "COOL", "BEAUTY"};
         ArrayAdapter<String> adapterFilterList = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, filterList);
         lFilter.setAdapter(adapterFilterList);
-        lFilter.setSelection(filterList.length - 1);
+        lFilter.setSelection(0);
         lFilter.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 switch (position) {
                     case 0:
-                        mPublisher.switchCameraFilter(MagicFilterType.DENYA);
+                        runTimer();
+                        //mPublisher.switchCameraFilter(MagicFilterType.DENYA);
                         break;
                     case 1:
                         mPublisher.switchCameraFilter(MagicFilterType.NONE);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 2:
                         mPublisher.switchCameraFilter(MagicFilterType.EARLYBIRD);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 3:
                         mPublisher.switchCameraFilter(MagicFilterType.EVERGREEN);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 4:
                         mPublisher.switchCameraFilter(MagicFilterType.N1977);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 5:
                         mPublisher.switchCameraFilter(MagicFilterType.NOSTALGIA);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 6:
                         mPublisher.switchCameraFilter(MagicFilterType.ROMANCE);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 7:
                         mPublisher.switchCameraFilter(MagicFilterType.SUNRISE);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 8:
                         mPublisher.switchCameraFilter(MagicFilterType.SUNSET);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 9:
                         mPublisher.switchCameraFilter(MagicFilterType.TENDER);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 10:
                         mPublisher.switchCameraFilter(MagicFilterType.TOASTER2);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 11:
                         mPublisher.switchCameraFilter(MagicFilterType.VALENCIA);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 12:
                         mPublisher.switchCameraFilter(MagicFilterType.WALDEN);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 13:
                         mPublisher.switchCameraFilter(MagicFilterType.WARM);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 14:
                         mPublisher.switchCameraFilter(MagicFilterType.COOL);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     case 15:
                         mPublisher.switchCameraFilter(MagicFilterType.BEAUTY);
+                        if (isTimer) {
+                            timer.cancel();
+                        }
                         break;
                     default:
                         mPublisher.switchCameraFilter(MagicFilterType.DENYA);

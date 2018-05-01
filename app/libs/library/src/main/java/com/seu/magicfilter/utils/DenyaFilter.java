@@ -73,6 +73,8 @@ class DenyaFilter extends GPUImageFilter {
         super.onInitialized();
         runOnDraw(new Runnable() {
             public void run() {
+
+
                 GLES20.glGenTextures(1, mToneCurveTexture, 0);
                 GLES20.glBindTexture(GLES20.GL_TEXTURE_2D, mToneCurveTexture[0]);
                 GLES20.glTexParameterf(GLES20.GL_TEXTURE_2D,
@@ -107,8 +109,9 @@ class DenyaFilter extends GPUImageFilter {
                 SharedPreferences sp = getContext().getSharedPreferences("Yasea", MODE_PRIVATE);
                 battleId = sp.getString("rtmpUrl", battleId);
                 battleId = battleId.substring(battleId.lastIndexOf("/") + 1);
+                mMaskGrey1TextureId = OpenGLUtils.loadTexture1(getContext(), "https://wt23.ru/mpd/ff_background_14.png");
                 //mMaskGrey1TextureId = OpenGLUtils.loadTexture1(getContext(), "https://wt23.ru/js/ffimage.php?user1=asd&user2=ffs&user3=&battle_id=14");
-                mMaskGrey1TextureId = OpenGLUtils.loadTexture(getContext(), "filter/wt.png");
+                //mMaskGrey1TextureId = OpenGLUtils.loadTexture(getContext(), "filter/wt.png");
 
 
             }
