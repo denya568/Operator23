@@ -36,10 +36,10 @@ void main()
 	textureColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, 1.0);
 
 	redCurveValue = texture2D(curve, vec2(textureColor.r, 0.0)).a;
-	greenCurveValue = texture2D(curve, vec2(textureColor.g, 0.0)).a; 
-    blueCurveValue = texture2D(curve, vec2(textureColor.b, 0.0)).a; 
+	greenCurveValue = texture2D(curve, vec2(textureColor.g, 0.0)).a;
+    blueCurveValue = texture2D(curve, vec2(textureColor.b, 0.0)).a;
 
-	lowp vec4 textureColor2 = vec4(redCurveValue, greenCurveValue, blueCurveValue, 1.0); 
+	lowp vec4 textureColor2 = vec4(redCurveValue, greenCurveValue, blueCurveValue, 1.0);
 
 	// step3 screen with 60% 
 	lowp vec4 base = vec4(mix(textureColor.rgb, textureColor2.rgb, 1.0 - greyColor.r), textureColor.a); 
@@ -52,7 +52,7 @@ void main()
 	redCurveValue = texture2D(curve, vec2(textureColor.r, 1.0)).r; 
 	greenCurveValue = texture2D(curve, vec2(textureColor.g, 1.0)).g;
 	blueCurveValue = texture2D(curve, vec2(textureColor.b, 1.0)).b; 
-	textureColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, 1.0); 
+	textureColor = vec4(redCurveValue, greenCurveValue, blueCurveValue, 1.0);
 
-	gl_FragColor = vec4(textureColor.r, textureColor.g, textureColor.b, 1.0); 
+	gl_FragColor = vec4(textureColor.r, textureColor.g, textureColor.b, 1.0);
 }

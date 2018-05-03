@@ -1,7 +1,11 @@
 package com.seu.magicfilter.advanced;
 
+import java.io.ByteArrayOutputStream;
 import java.nio.ByteBuffer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.opengl.GLES20;
 
 import com.seu.magicfilter.utils.MagicFilterType;

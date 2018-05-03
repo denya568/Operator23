@@ -84,7 +84,7 @@ void main()
 		ba = 1.0 - ((1.0 - base.b) * (1.0 - overlay.b) * 0.0);
 	}*/
 
-	if (base.r + base.g + base.b < 0.5) {
+	if (base.r + base.g + base.b < 0.6) {
 	    ra = 1.0;
 	    ga = 2.0;
 	    ba = 1.0;

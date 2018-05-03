@@ -61,6 +61,7 @@ public class MagicWaldenFilter extends GPUImageFilter {
             public void run(){
                 inputTextureHandles[0] = OpenGLUtils.loadTexture(getContext(), "filter/walden_map.png");
                 inputTextureHandles[1] = OpenGLUtils.loadTexture(getContext(), "filter/vignette_map.png");
+
             }
         });
     }

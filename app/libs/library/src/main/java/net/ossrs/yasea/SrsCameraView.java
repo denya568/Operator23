@@ -2,6 +2,8 @@ package net.ossrs.yasea;
 
 import android.content.Context;
 import android.content.res.Configuration;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
@@ -15,7 +17,9 @@ import com.seu.magicfilter.utils.MagicFilterFactory;
 import com.seu.magicfilter.utils.MagicFilterType;
 import com.seu.magicfilter.utils.OpenGLUtils;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.Buffer;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.FloatBuffer;

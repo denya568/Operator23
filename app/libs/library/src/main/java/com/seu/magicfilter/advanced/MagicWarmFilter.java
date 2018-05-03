@@ -2,7 +2,10 @@ package com.seu.magicfilter.advanced;
 
 import java.nio.ByteBuffer;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.opengl.GLES20;
+import android.opengl.GLUtils;
 
 import com.seu.magicfilter.utils.MagicFilterType;
 import net.ossrs.yasea.R;
@@ -113,6 +116,8 @@ public class MagicWarmFilter extends GPUImageFilter{
                   arrayOfByte[(2 + (1024 + j * 4))] = ((byte)arrayOfInt7[j]);
                   arrayOfByte[(3 + (1024 + j * 4))] = ((byte)arrayOfInt8[j]);
                 }
+
+
                 GLES20.glTexImage2D(GLES20.GL_TEXTURE_2D, 0, GLES20.GL_RGBA, 256, 2, 0, GLES20.GL_RGBA, GLES20.GL_UNSIGNED_BYTE, ByteBuffer.wrap(arrayOfByte));
                 mMaskGrey1TextureId = OpenGLUtils.loadTexture(getContext(), "filter/warm_layer1.jpg");
                 mMaskGrey2TextureId = OpenGLUtils.loadTexture(getContext(), "filter/bluevintage_mask1.jpg");
